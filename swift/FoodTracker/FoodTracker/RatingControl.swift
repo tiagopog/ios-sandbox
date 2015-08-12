@@ -10,17 +10,32 @@ import UIKit
 
 class RatingControl: UIView {
   // MARK: Properties
-  var rating = 0
+  var rating = 0 {
+  didSet {
+    // setNeedsLayout() will trigger a layout update every time the rating changes
+    setNeedsLayout()
+  }
+  }
   var ratingButtons = [UIButton]()
+  var spacing = 5
+  var stars = 5
   
   // MARK: Initialization
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
 
-    for _ in 0..<5 {
+    let filledStarImage = UIImage(named: "filledStar")
+    let emptyStartImage = UIImage(named: "emptyStar")
+    
+    for _ in 0..<stars {
       // Create a button.
-      let button = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
-      button.backgroundColor = UIColor.redColor()
+      let button = UIButton()
+      
+      button.setImage(emptyStartImage, forState: .Normal)
+      button.setImage(filledStarImage, forState: .Selected)
+      button.setImage(filledStarImage, forState: [.Highlighted, .Selected])
+      
+      button.adjustsImageWhenHighlighted = false
 
       /*
       Without Interface Builder it does not need to define the action method with the IBAction attribute;
@@ -37,19 +52,28 @@ class RatingControl: UIView {
   }
   
   override func layoutSubviews() {
-    let size = 44
-    let margin = 5
+    let buttonSize = Int(frame.size.height)
 
-    var buttonFrame = CGRect(x: 0, y: 0, width: size, height: size);
+    var buttonFrame = CGRect(x: 0, y: 0, width: buttonSize, height: buttonSize);
     
     for (index, button) in ratingButtons.enumerate() {
-      buttonFrame.origin.x = CGFloat(index * (size + margin))
+      buttonFrame.origin.x = CGFloat(index * (buttonSize + spacing))
       button.frame = buttonFrame
     }
+
+    updateButtonSelectionState()
   }
   
   // MARK: Button Action
   func ratingButtonTapped(button: UIButton) {
-    print("Button pressed 👍")
+    rating = ratingButtons.indexOf(button)! + 1
+
+    updateButtonSelectionState()
+  }
+  
+  func updateButtonSelectionState() {
+    for (index, button) in ratingButtons.enumerate() {
+      button.selected = index < rating
+    }
   }
 }
