@@ -72,4 +72,24 @@ class MealTableViewController: UITableViewController {
         tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Bottom)
     }
   }
+  
+  // MARK: - Navigation
+  
+  // In a storyboard-based application, it's a good idea to do a little preparation before navigation
+  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    if segue.identifier == "ShowDetail" {
+      let mealDetailViewController = segue.destinationViewController as!
+        MealViewController
+      
+      if let selectedMealCell = sender as? MealTableViewCell {
+        let indexPath = tableView.indexPathForCell(selectedMealCell)!
+        let selectedMeal = meals[indexPath.row]
+        mealDetailViewController.meal = selectedMeal
+      }
+      
+    }
+    else if segue.identifier == "AddItem" {
+      print("Adding new meal.")
+    }
+  }
 }
