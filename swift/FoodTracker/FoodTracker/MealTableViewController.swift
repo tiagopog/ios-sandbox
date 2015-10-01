@@ -13,6 +13,7 @@ class MealTableViewController: UITableViewController {
   var meals = [Meal]()
 
   override func viewDidLoad() {
+    navigationItem.leftBarButtonItem = editButtonItem()
     super.viewDidLoad()
     loadSampleMeals()
   }
@@ -61,6 +62,22 @@ class MealTableViewController: UITableViewController {
     cell.ratingControl.rating = meal.rating
     
     return cell
+  }
+  
+  // Override to support editing the table view.
+  override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    if editingStyle == .Delete {
+      meals.removeAtIndex(indexPath.row)
+      tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+    } else if editingStyle  == .Insert {
+      // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }
+  }
+  
+  // Override to support conditional editing of the table view.
+  override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    // Return false if you do not want the specified item to be editable.
+    return true
   }
   
   @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
