@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class ViewController: UIViewController {
   // MARK: Globals
@@ -46,7 +47,9 @@ class ViewController: UIViewController {
   
   func get_request(query: String) {
     // URL parse and session.
-    let url: NSURL = NSURL(string: url_to_request + query)!
+    let queryString = query.stringByReplacingOccurrencesOfString(" ", withString: "+") as? String
+    let urlWithQueryString = url_to_request + queryString!
+    let url: NSURL = NSURL(string: urlWithQueryString)!
     let session = NSURLSession.sharedSession()
     
     // Build the request.
@@ -66,7 +69,12 @@ class ViewController: UIViewController {
 
       // Data:
       let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-      print(dataString)      
+      print(dataString)
+      
+      // JSON parse:
+      let json = JSON(data: data!)
+      print("Results in JSON:")
+      print(json["responseData"]["results"])
     }
     
     task.resume()
