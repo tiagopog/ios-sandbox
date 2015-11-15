@@ -21,6 +21,13 @@ class ViewController: UIViewController {
   // MARK: Actions
   
   @IBAction func searchFromGoogle(sender: AnyObject) {
+    let query: String! = queryField.text!
+    if query.isEmpty {
+      print("Query is empty!")
+    } else {
+      print("Query is: " + query)
+      get_request(query)
+    }
   }
   
   // MARK: Default callbacks
@@ -54,9 +61,12 @@ class ViewController: UIViewController {
           print("error")
           return
       }
+      // Response:
       print(response)
+
+      // Data:
       let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-      print(dataString)
+      print(dataString)      
     }
     
     task.resume()
