@@ -50,7 +50,13 @@ class Meal: NSObject, NSCoding {
   func encodeWithCoder(aCoder: NSCoder) {
     aCoder.encodeObject(name, forKey: PropertyKey.nameKey)
     aCoder.encodeObject(photo, forKey: PropertyKey.photoKey)
-    aCoder.encodeObject(rating, forKey: PropertyKey.ratingKey)
+    /*
+     * FIXME: It's getting an error when loading rating from
+     * NSKeyedUnarchiver.unarchiveObjectWithFile
+     * Error: NSInvalidUnarchiveOperationException', reason: '*** -[NSKeyedUnarchiver decodeInt32ForKey:]: value
+     * for key (rating) is not an integer number'
+     */
+    // aCoder.encodeObject(rating, forKey: PropertyKey.ratingKey)
   }
   
   required convenience init?(coder aDecoder: NSCoder) {
